@@ -136,6 +136,12 @@ curl -X POST "http://127.0.0.1:8000/chat" \
   }'
 ```
 
+## Скриншот результата
+
+Ниже пример ответа RAG-сервиса:
+
+![RAG result screenshot](assets/rag-result.png)
+
 ## Структура проекта
 
 ```text
@@ -187,4 +193,3 @@ curl -X POST "http://127.0.0.1:8000/chat" \
 - Модель и векторное хранилище инициализируются при импорте `rag_service.py`; первый запуск может быть долгим.
 - `MOODLE_CHROMA_DB_DIR` и коллекция должны существовать до старта API.
 - Если Moodle Docs отдает challenge-страницы, используйте `scripts/bootstrap_storage_state.py` и передавайте state/cookies в краулер.
-
