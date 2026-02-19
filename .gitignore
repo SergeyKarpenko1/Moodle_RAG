@@ -1,0 +1,44 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs / local runtime
+*.log
+.state/
+.crawl4ai/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Generated Moodle data
+data/moodle_docs/chroma_langchain_db/
+data/moodle_docs/pages.jsonl
+data/moodle_docs/pages.cleaned.jsonl
+data/moodle_docs/youtube_links.jsonl
+
+# Keep only 2 examples in clean_markdown
+data/moodle_docs/clean_markdown/**
+!data/moodle_docs/clean_markdown/
+!data/moodle_docs/clean_markdown/403__en__Survey_activity.md
+!data/moodle_docs/clean_markdown/403__en__Activity_completion_settings.md
+
+# Keep only 2 examples in chunks_md
+data/moodle_docs/chunks_md/**
+!data/moodle_docs/chunks_md/
+!data/moodle_docs/chunks_md/403__en__Upgrade_overview/
+!data/moodle_docs/chunks_md/403__en__Upgrade_overview/chunk_0000.md
+!data/moodle_docs/chunks_md/403__en__Upgrade_overview/chunk_0001.md

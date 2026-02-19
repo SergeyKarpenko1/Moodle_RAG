@@ -1,0 +1,13 @@
+{
+  "id": "skarp1/moodle-rag",
+  "title": "Moodle_RAG",
+  "code_file": "moodle_rag.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "enable_tpu": false
+}
