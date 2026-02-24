@@ -1,10 +1,10 @@
 import argparse
 import json
 import re
+from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse, urlunparse
-
 
 CHALLENGE_MARKERS = (
     "just a moment",
@@ -35,9 +35,7 @@ FOOTER_MARKERS = (
     "[accessibility statement](",
     "[![powered by mediawiki]",
 )
-BAD_YOUTUBE_PATTERNS = (
-    "youtube.com/howyoutubeworks/user-settings/privacy",
-)
+BAD_YOUTUBE_PATTERNS = ("youtube.com/howyoutubeworks/user-settings/privacy",)
 
 DROP_EXACT_LINES = {
     "Menu",
@@ -106,7 +104,7 @@ def normalize_url(url: str) -> str:
     return urlunparse(parsed)
 
 
-def iter_jsonl(path: Path):
+def iter_jsonl(path: Path) -> "Generator[dict[str, Any], None, None]":
     with path.open("r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
@@ -208,11 +206,7 @@ def strip_markdown_to_text(markdown: str, title: str) -> str:
     for line in out:
         if line.strip() == "" and compact and compact[-1].strip() == "":
             continue
-        if (
-            compact
-            and line.strip() == expected_h1
-            and compact[-1].strip() == expected_h1
-        ):
+        if compact and line.strip() == expected_h1 and compact[-1].strip() == expected_h1:
             continue
         compact.append(line)
 

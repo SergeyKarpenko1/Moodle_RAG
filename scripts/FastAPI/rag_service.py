@@ -4,14 +4,13 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
 
+from deep_translator import GoogleTranslator
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langdetect import detect
-from deep_translator import GoogleTranslator
-from mlx_lm import load, generate
+from mlx_lm import generate, load
 
 load_dotenv()
 
@@ -32,11 +31,11 @@ vector_store = Chroma(
     persist_directory=PERSIST_DIR,
 )
 
-model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")  # type: ignore[misc]
 
 
 # --- функции из ноутбука ---
-def prepare_query(user_query: str) -> Tuple[str, str]:
+def prepare_query(user_query: str) -> tuple[str, str]:
     text = (user_query or "").strip()
     if not text:
         return "", "ru"
@@ -62,7 +61,7 @@ def prepare_query(user_query: str) -> Tuple[str, str]:
     return query_en, lang
 
 
-def build_context(user_query: str, k: int = 5):
+def build_context(user_query: str, k: int = 5) -> tuple[str, str, list[tuple]]:  # type: ignore[type-arg]
     query_en, user_lang = prepare_query(user_query)
     results = vector_store.similarity_search_with_score(query_en, k=k)
 
@@ -85,7 +84,7 @@ def generate_answer(
     user_query: str,
     context: str,
     user_lang: str,
-    recent_history: List[Dict[str, str]] | None = None,
+    recent_history: list[dict[str, str]] | None = None,
 ) -> str:
     answer_lang = "Russian" if user_lang == "ru" else "English"
 
@@ -123,7 +122,7 @@ def generate_answer(
     </OUTPUT_FORMAT_REQUIREMENTS>
     """.strip()
 
-    messages: List[Dict[str, str]] = [{"role": "system", "content": system_prompt}]
+    messages: list[dict[str, str]] = [{"role": "system", "content": system_prompt}]
 
     if recent_history:
         for m in recent_history:
@@ -134,25 +133,18 @@ def generate_answer(
             if role in {"user", "assistant"} and isinstance(content, str) and content.strip():
                 messages.append({"role": role, "content": content})
 
-
     messages.append(
         {
             "role": "user",
-            "content": (
-                f"QUESTION:\n{user_query}\n\n"
-                f"CONTEXT:\n{context}\n\n"
-                f"IMPORTANT: Respond ONLY in {answer_lang}."
-            ),
+            "content": (f"QUESTION:\n{user_query}\n\nCONTEXT:\n{context}\n\nIMPORTANT: Respond ONLY in {answer_lang}."),
         }
     )
 
-    prompt = tokenizer.apply_chat_template(
-        messages, tokenize=False, add_generation_prompt=True
-    )
+    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     return generate(model, tokenizer, prompt=prompt, max_tokens=550)
 
 
-def retrieval_query_with_context(query: str, chat_history: List[Dict[str, str]]) -> str:
+def retrieval_query_with_context(query: str, chat_history: list[dict[str, str]]) -> str:
     q = query.strip()
     if len(q.split()) <= 4:
         prev_users = [m["content"] for m in chat_history if m.get("role") == "user"]

@@ -27,7 +27,6 @@ os.environ.setdefault("CRAWL4_AI_BASE_DIRECTORY", str(Path.cwd()))
 
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
 
-
 YOUTUBE_HOSTS = (
     "youtube.com",
     "www.youtube.com",
@@ -62,11 +61,7 @@ def append_jsonl(path: Path, payload: dict[str, Any]) -> None:
 
 def normalize_url(url: str) -> str:
     parsed = urlparse(url.strip())._replace(fragment="")
-    params = [
-        (k, v)
-        for k, v in parse_qsl(parsed.query, keep_blank_values=True)
-        if k.lower() not in NOISY_QUERY_PARAMS
-    ]
+    params = [(k, v) for k, v in parse_qsl(parsed.query, keep_blank_values=True) if k.lower() not in NOISY_QUERY_PARAMS]
     return urlunparse(parsed._replace(query=urlencode(params, doseq=True)))
 
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 from pathlib import Path
+
 from playwright.sync_api import sync_playwright
 
 STATE_PATH = Path(".state/moodle_storage_state.json")
@@ -14,6 +15,7 @@ CHALLENGE_MARKERS = [
     "captcha",
     "cloudflare",
 ]
+
 
 def is_challenge(title: str, body: str) -> tuple[bool, list[str]]:
     t = (title or "").lower()
@@ -30,6 +32,7 @@ def parse_args() -> argparse.Namespace:
         help="CDP URL of manually opened Chrome.",
     )
     return parser.parse_args()
+
 
 args = parse_args()
 
