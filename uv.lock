@@ -1845,6 +1845,7 @@ name = "moodle-rag-with-crowler"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "chromadb" },
     { name = "chromium" },
     { name = "crawl4ai" },
     { name = "deep-translator" },
@@ -1871,6 +1872,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "chromadb", specifier = ">=1.5.0" },
     { name = "chromium", specifier = ">=0.0.0" },
     { name = "crawl4ai", specifier = ">=0.8.0" },
     { name = "deep-translator", specifier = ">=1.11.4" },
